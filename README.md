@@ -1,6 +1,6 @@
-# G Events — Backend (NestJS + SQLite)
+# Bora Viver — Backend
 
-API REST do Capstone **G Events**, com modelagem SQL do Módulo 3 e geolocalização na entidade `atividade`.
+API REST do projeto **Bora Viver**, responsável por fornecer os dados e serviços utilizados pelo aplicativo Android disponível no repositório [Bora Viver — Android](https://github.com/lisscodes/bora-viver).
 
 ## Stack
 
@@ -16,7 +16,7 @@ API REST do Capstone **G Events**, com modelagem SQL do Módulo 3 e geolocaliza�
 | `organizador` / `participante` | Papéis |
 | `contato_emergencia` | Obrigatório ao participante |
 | `local` | Espaço físico |
-| `atividade` | Evento (**com `latitude` e `longitude`**) |
+| `atividade` | Evento |
 | `inscricao` | Interesse / participação |
 | `registro_presenca` | Check-in / check-out |
 
@@ -30,25 +30,19 @@ npm run start:dev
 
 API em `http://localhost:3000`.
 
-## Endpoints (contrato do app Android)
+## Endpoints
 
 | Método | Rota | Descrição |
 |--------|------|-----------|
 | GET | `/events` | Lista eventos publicados |
-| GET | `/events/nearby?lat=&lng=&radius=` | Busca por geolocalização (km) |
+| GET | `/events/nearby?lat=&lng=&radius=` | Eventos próximos (km) |
 | GET | `/events/:id` | Detalhe |
 | POST | `/events` | Criar |
 | PATCH | `/events/:id` | Atualizar |
 | DELETE | `/events/:id` | Remover |
 
-JSON no formato `RemoteEvent` do frontend (`id`, `title`, `description`, `date`, `location_name`, `latitude`, `longitude`, `image_url`).
-
 ## SQL do módulo
 
-- `sql/schema.sql` — DDL (entidades, FKs, checks, índice geo)
+- `sql/schema.sql` — DDL (entidades, FKs, checks)
 - `sql/seed.sql` — dados iniciais
 - `sql/dml_exemplos.sql` — INSERT / UPDATE / DELETE / SELECT
-
-## App Android
-
-No emulador, a base URL é `http://10.0.2.2:3000/` (apontando para o host). Cleartext HTTP está liberado no `AndroidManifest`.
