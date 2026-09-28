@@ -15,10 +15,10 @@ export class RegistroPresenca {
   @Column({ name: 'id_inscricao', unique: true })
   idInscricao: number;
 
-  @Column({ name: 'data_hora_checkin', type: 'datetime' })
+  @Column({ name: 'data_hora_checkin', type: 'timestamp' })
   dataHoraCheckin: Date;
 
-  @Column({ name: 'data_hora_checkout', type: 'datetime', nullable: true })
+  @Column({ name: 'data_hora_checkout', type: 'timestamp', nullable: true })
   dataHoraCheckout: Date | null;
 
   @Column({ name: 'observacao_opcional', type: 'text', nullable: true })

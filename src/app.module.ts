@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { join } from 'path';
 import { Atividade } from './entities/atividade.entity';
 import { ContatoEmergencia } from './entities/contato-emergencia.entity';
 import { Inscricao } from './entities/inscricao.entity';
@@ -14,21 +14,29 @@ import { DatabaseBootstrapService } from './database/database-bootstrap.service'
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'better-sqlite3',
-      database: join(__dirname, '..', 'data', 'gevents.sqlite'),
-      entities: [
-        Usuario,
-        Organizador,
-        Participante,
-        ContatoEmergencia,
-        Local,
-        Atividade,
-        Inscricao,
-        RegistroPresenca,
-      ],
-      synchronize: false,
-      logging: false,
+    ConfigModule.forRoot({ isGlobal: true }),
+    TypeOrmModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        type: 'postgres' as const,
+        host: config.get<string>('DB_HOST', 'localhost'),
+        port: Number(config.get<string>('DB_PORT', '5432')),
+        username: config.get<string>('DB_USER', 'bora'),
+        password: config.get<string>('DB_PASSWORD', 'bora'),
+        database: config.get<string>('DB_NAME', 'bora_viver'),
+        entities: [
+          Usuario,
+          Organizador,
+          Participante,
+          ContatoEmergencia,
+          Local,
+          Atividade,
+          Inscricao,
+          RegistroPresenca,
+        ],
+        synchronize: false,
+        logging: false,
+      }),
     }),
     EventsModule,
   ],

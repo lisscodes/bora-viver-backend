@@ -1,6 +1,6 @@
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { DataSource } from 'typeorm';
-import { existsSync, mkdirSync, readFileSync } from 'fs';
+import { readFileSync } from 'fs';
 import { join } from 'path';
 
 @Injectable()
@@ -10,15 +10,10 @@ export class DatabaseBootstrapService implements OnModuleInit {
   constructor(private readonly dataSource: DataSource) {}
 
   async onModuleInit() {
-    const dataDir = join(process.cwd(), 'data');
-    if (!existsSync(dataDir)) {
-      mkdirSync(dataDir, { recursive: true });
-    }
-
     await this.runSqlFile(join(process.cwd(), 'sql', 'schema.sql'));
 
     const [{ total }] = await this.dataSource.query(
-      'SELECT COUNT(*) AS total FROM atividade',
+      'SELECT COUNT(*)::int AS total FROM atividade',
     );
 
     if (Number(total) === 0) {
@@ -42,11 +37,9 @@ export class DatabaseBootstrapService implements OnModuleInit {
   }
 
   private isCommentOnly(statement: string): boolean {
-    return statement
-      .split('\n')
-      .every((line) => {
-        const trimmed = line.trim();
-        return trimmed.length === 0 || trimmed.startsWith('--');
-      });
+    return statement.split('\n').every((line) => {
+      const trimmed = line.trim();
+      return trimmed.length === 0 || trimmed.startsWith('--');
+    });
   }
 }

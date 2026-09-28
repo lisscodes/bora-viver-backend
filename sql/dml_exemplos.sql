@@ -1,9 +1,7 @@
 -- ============================================================
 -- Exemplos de manipulação (INSERT / UPDATE / DELETE / SELECT)
--- Execute após schema.sql + seed.sql
+-- Execute após schema.sql + seed.sql (PostgreSQL)
 -- ============================================================
-
-PRAGMA foreign_keys = ON;
 
 -- ---------- INSERT ----------
 INSERT INTO local (nome_ou_referencia, endereco_completo, cidade, estado, cep)
@@ -23,7 +21,7 @@ INSERT INTO atividade (
   '2026-07-05 17:00:00',
   150,
   'publicado',
-  1,
+  TRUE,
   -23.5732,
   -46.4621
 );
@@ -54,20 +52,34 @@ JOIN organizador o ON o.usuario_id = a.usuario_id_organizador
 WHERE a.status_publicacao = 'publicado'
 ORDER BY a.data_hora_inicio;
 
--- ---------- SELECT (geolocalização — filtro por bounding box; a API usa Haversine) ----------
--- Ponto de referência: Praça da Sé (-23.5505, -46.6333), ~10 km ≈ 0.09 graus
+-- ---------- SELECT (geolocalização — Haversine em km) ----------
+-- Ponto de referência: Praça da Sé (-23.5505, -46.6333), raio 10 km
 SELECT
   a.id_atividade,
   a.titulo,
   a.latitude,
   a.longitude,
-  l.nome_ou_referencia AS local
+  (
+    6371 * acos(
+      LEAST(1.0, GREATEST(-1.0,
+        cos(radians(-23.5505)) * cos(radians(a.latitude)) *
+        cos(radians(a.longitude) - radians(-46.6333)) +
+        sin(radians(-23.5505)) * sin(radians(a.latitude))
+      ))
+    )
+  ) AS distancia_km
 FROM atividade a
-JOIN local l ON l.id_local = a.id_local
 WHERE a.status_publicacao = 'publicado'
-  AND a.latitude BETWEEN -23.5505 - 0.09 AND -23.5505 + 0.09
-  AND a.longitude BETWEEN -46.6333 - 0.09 AND -46.6333 + 0.09
-ORDER BY a.titulo;
+  AND (
+    6371 * acos(
+      LEAST(1.0, GREATEST(-1.0,
+        cos(radians(-23.5505)) * cos(radians(a.latitude)) *
+        cos(radians(a.longitude) - radians(-46.6333)) +
+        sin(radians(-23.5505)) * sin(radians(a.latitude))
+      ))
+    )
+  ) <= 10
+ORDER BY distancia_km;
 
 -- ---------- SELECT (inscrições de um participante) ----------
 SELECT
