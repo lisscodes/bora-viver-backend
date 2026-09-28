@@ -1,4 +1,11 @@
-import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToMany,
+  OneToOne,
+  PrimaryColumn,
+} from 'typeorm';
 import { Atividade } from './atividade.entity';
 import { Usuario } from './usuario.entity';
 
@@ -13,7 +20,12 @@ export class Organizador {
   @Column({ name: 'descricao_grupo', type: 'text', nullable: true })
   descricaoGrupo: string | null;
 
-  @Column({ name: 'link_rede_social', type: 'varchar', length: 500, nullable: true })
+  @Column({
+    name: 'link_rede_social',
+    type: 'varchar',
+    length: 500,
+    nullable: true,
+  })
   linkRedeSocial: string | null;
 
   @OneToOne(() => Usuario)

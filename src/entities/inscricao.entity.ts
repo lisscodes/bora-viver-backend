@@ -23,7 +23,7 @@ export class Inscricao {
 
   @Column({
     name: 'data_hora_solicitacao',
-    type: 'datetime',
+    type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP',
   })
   dataHoraSolicitacao: Date;

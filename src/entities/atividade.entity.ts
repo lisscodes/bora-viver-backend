@@ -27,13 +27,18 @@ export class Atividade {
   @Column({ type: 'text', nullable: true })
   descricao: string | null;
 
-  @Column({ name: 'tipo_ou_categoria', type: 'varchar', length: 120, nullable: true })
+  @Column({
+    name: 'tipo_ou_categoria',
+    type: 'varchar',
+    length: 120,
+    nullable: true,
+  })
   tipoOuCategoria: string | null;
 
-  @Column({ name: 'data_hora_inicio', type: 'datetime' })
+  @Column({ name: 'data_hora_inicio', type: 'timestamp' })
   dataHoraInicio: Date;
 
-  @Column({ name: 'data_hora_fim', type: 'datetime', nullable: true })
+  @Column({ name: 'data_hora_fim', type: 'timestamp', nullable: true })
   dataHoraFim: Date | null;
 
   @Column({ name: 'limite_participantes', type: 'integer', nullable: true })
@@ -46,10 +51,10 @@ export class Atividade {
   gratuito: boolean;
 
   /** Geolocalização do evento — feature principal do G Events */
-  @Column({ type: 'real' })
+  @Column({ type: 'double precision' })
   latitude: number;
 
-  @Column({ type: 'real' })
+  @Column({ type: 'double precision' })
   longitude: number;
 
   @Column({ name: 'image_url', type: 'text', nullable: true })

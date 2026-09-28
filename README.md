@@ -5,7 +5,7 @@ API REST do projeto **Bora Viver**, responsável por fornecer os dados e serviç
 ## Stack
 
 - NestJS + TypeORM
-- SQLite (`data/gevents.sqlite`)
+- PostgreSQL
 - Schema versionado em `sql/schema.sql`
 
 ## Modelo (resumo)
@@ -20,15 +20,31 @@ API REST do projeto **Bora Viver**, responsável por fornecer os dados e serviç
 | `inscricao` | Interesse / participação |
 | `registro_presenca` | Check-in / check-out |
 
-## Subir a API
+## Subir o banco e a API
 
 ```bash
-export NVM_DIR="$HOME/.nvm" && . "$NVM_DIR/nvm.sh" && nvm use 20
+# 1) PostgreSQL (Docker)
+docker compose up -d
+
+# 2) Variáveis de ambiente
+cp .env.example .env
+
+# 3) API (Node 20+)
+# Se aparecer SyntaxError com '??=', o terminal está no Node antigo.
+export NVM_DIR="$HOME/.nvm" && . "$NVM_DIR/nvm.sh" && nvm use
 npm install
 npm run start:dev
 ```
 
 API em `http://localhost:3000`.
+
+Conexão DBeaver (valores locais do `.env` / `.env.example`; o Compose lê essas variáveis):
+
+- Host: `localhost` (`DB_HOST`)
+- Port: `5433` (`DB_PORT`; mapeada do container)
+- Database: `bora_viver` (`DB_NAME`)
+- User: `bora` (`DB_USER`)
+- Password: ver `DB_PASSWORD` no seu `.env` (placeholder local em `.env.example`)
 
 ## Endpoints
 

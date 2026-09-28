@@ -18,7 +18,7 @@ export class Usuario {
 
   @Column({
     name: 'data_cadastro',
-    type: 'datetime',
+    type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP',
   })
   dataCadastro: Date;
